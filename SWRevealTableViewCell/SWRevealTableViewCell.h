@@ -60,6 +60,7 @@
 
 #define SupportsVisualEffects false
 
+@class SWUtilityButton;
 @class SWRevealTableViewCell;
 @class UIVisualEffect;
 @class UIPopoverPresentationController;
@@ -76,8 +77,8 @@
 
 // Cell Button Item initialization
 // Return YES on the handler block if you want the item to be automatically dismissed immediatelly after user tap, NO otherwise
-+ (instancetype)itemWithTitle:(NSString*)title handler:(BOOL(^)(SWCellButtonItem *item, SWRevealTableViewCell* cell))handler;
-+ (instancetype)itemWithImage:(UIImage*)image handler:(BOOL(^)(SWCellButtonItem *item, SWRevealTableViewCell* cell))handler;
++ (instancetype)itemWithTitle:(NSString*)title handler:(BOOL(^)(SWCellButtonItem *item, SWRevealTableViewCell* cell, SWUtilityButton* button))handler;
++ (instancetype)itemWithImage:(UIImage*)image handler:(BOOL(^)(SWCellButtonItem *item, SWRevealTableViewCell* cell, SWUtilityButton* button))handler;
 
 // Cell Button Item properties
 @property(nonatomic) CGFloat width;              // default is 0.0

@@ -78,11 +78,11 @@ static UIImage* _imageWithColor_size(UIColor* color, CGSize size)
 
 
 #pragma mark - SWCellButton Item
-
+@class SWUtilityButton;
 @class SWUtilityContentView;
 
 @interface SWCellButtonItem()
-@property(nonatomic,strong) BOOL (^handler)(SWCellButtonItem *, SWRevealTableViewCell*);
+@property(nonatomic,strong) BOOL (^handler)(SWCellButtonItem *, SWRevealTableViewCell*, SWUtilityButton*);
 @property(nonatomic,assign) SWUtilityContentView *view;  // Note that we do not retain this
 @property(nonatomic,readonly) BOOL isOpaque;
 @end
@@ -127,7 +127,7 @@ static UIImage* _imageWithColor_size(UIColor* color, CGSize size)
 //}
 
 
-- (instancetype)initWithTitle:(NSString *)title image:(UIImage*)image handler:(BOOL(^)(SWCellButtonItem *, SWRevealTableViewCell* cell))handler;
+- (instancetype)initWithTitle:(NSString *)title image:(UIImage*)image handler:(BOOL(^)(SWCellButtonItem *, SWRevealTableViewCell* cell, SWUtilityButton* button))handler;
 {
     self = [super init];
     if ( self )
@@ -152,13 +152,13 @@ static UIImage* _imageWithColor_size(UIColor* color, CGSize size)
 }
 
 
-+ (instancetype)itemWithTitle:(NSString *)title handler:(BOOL(^)(SWCellButtonItem *, SWRevealTableViewCell *))handler
++ (instancetype)itemWithTitle:(NSString *)title handler:(BOOL(^)(SWCellButtonItem *, SWRevealTableViewCell *, SWUtilityButton* button))handler
 {
     return [[SWCellButtonItem alloc] initWithTitle:title image:nil handler:handler];
 }
 
 
-+ (instancetype)itemWithImage:(UIImage*)image handler:(BOOL(^)(SWCellButtonItem *item, SWRevealTableViewCell* cell))handler
++ (instancetype)itemWithImage:(UIImage*)image handler:(BOOL(^)(SWCellButtonItem *item, SWRevealTableViewCell* cell, SWUtilityButton* button))handler
 
 {
     return [[SWCellButtonItem alloc] initWithTitle:nil image:image handler:handler];
@@ -440,22 +440,22 @@ static const CGFloat OverDrawWidth = 60;
 {
     BOOL dismiss = NO;
     if ( _isLeftExtended )
-        dismiss = [self _performActionForItem:[_leftButtonItems firstObject]];
+        dismiss = [self _performActionForItem:[_leftButtonItems firstObject] button:nil];
 
     if ( _isRightExtended )
-        dismiss = [self _performActionForItem:[_rightButtonItems firstObject]];
+        dismiss = [self _performActionForItem:[_rightButtonItems firstObject] button:nil];
     
     return dismiss;
 }
 
 
-- (BOOL)_performActionForItem:(SWCellButtonItem*)item
+- (BOOL)_performActionForItem:(SWCellButtonItem*)item button:(SWUtilityButton*)button
 {
-    BOOL (^handler)(SWCellButtonItem*,SWRevealTableViewCell*) = item.handler;
+    BOOL (^handler)(SWCellButtonItem*,SWRevealTableViewCell*,SWUtilityButton*) = item.handler;
     
     BOOL dismiss = NO;
     if ( handler )
-        dismiss = handler( item, _c );
+        dismiss = handler( item, _c, button );
     
     return dismiss;
 }
@@ -464,7 +464,7 @@ static const CGFloat OverDrawWidth = 60;
 - (void)_buttonTouchUpAction:(SWUtilityButton*)button
 {
     SWCellButtonItem *item = button.item;
-    if ( [self _performActionForItem:item] )
+    if ( [self _performActionForItem:item button:button] )
         [_c setRevealPosition:SWCellRevealPositionCenter animated:YES];
 }
 
