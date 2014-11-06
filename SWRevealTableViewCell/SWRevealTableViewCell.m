@@ -542,6 +542,8 @@ static const CGFloat OverDrawWidth = 60;
         button.frame = utilityButtonView.bounds;
         button.titleLabel.numberOfLines = 0;
         button.titleLabel.textAlignment = NSTextAlignmentCenter;
+        button.layer.borderColor = [UIColor whiteColor].CGColor;
+        button.layer.borderWidth = 1/[UIScreen mainScreen].scale;
         button.item = item;
         
         // Depending on actual item properties, we configure the button to make the best of it
